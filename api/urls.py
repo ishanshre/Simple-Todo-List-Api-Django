@@ -5,4 +5,6 @@ app_name='api'
 urlpatterns = [
     path('',views.TodoListView.as_view()),
     path('create/',views.TodoListCreateView.as_view()),
+    path('<int:pk>/', views.TodoUpdateDeleteView.as_view()),
+    path('<int:pk>/complete/', views.TodoToogleCompleteView.as_view()),
 ]
