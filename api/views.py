@@ -8,6 +8,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.authtoken.models import Token
 from django.http import JsonResponse
 from django.db import IntegrityError
+from django.contrib.auth import authenticate
 # Create your views here.
 
 class TodoListView(generics.ListAPIView):
@@ -69,3 +70,23 @@ def signup(request):
 
         except IntegrityError:
             return JsonResponse({'error':'username already taken, user another one'}, status=400)
+
+
+@csrf_exempt
+def login(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)#convert json data to python dict
+        user = authenticate(
+            request,
+            username=data['username'],
+            password = data['password']
+        )#save auth creditancials 
+        if user is None:
+            return JsonResponse({'error':'Wrong User name or password'}, status=400)
+        else:
+            try:
+                token = Token.objects.get(user=user)
+            except:
+                token = Token.objects.create(user=user)#if token is not created
+            return JsonResponse({'token':str(token)}, status=200)
+

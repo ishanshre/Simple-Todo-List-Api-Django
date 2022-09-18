@@ -8,4 +8,5 @@ urlpatterns = [
     path('<int:pk>/', views.TodoUpdateDeleteView.as_view()),
     path('<int:pk>/complete/', views.TodoToogleCompleteView.as_view()),
     path('signup/', views.signup),
+    path('login/', views.login),
 ]
